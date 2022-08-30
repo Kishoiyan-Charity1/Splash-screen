@@ -3,6 +3,7 @@ package dev.kishoiyan.workoutlog.ui
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import dev.kishoiyan.workoutlog.ApiClient
 import dev.kishoiyan.workoutlog.ApiInterface
@@ -44,7 +45,7 @@ class SignUpActivity : AppCompatActivity() {
         var phoneNumber= binding.etPhoneNumber.text.toString()
 
 
-        var error=true
+        var error=false
 
         if (firstname.isBlank()){
             error=true
@@ -56,10 +57,6 @@ class SignUpActivity : AppCompatActivity() {
         if (email.isBlank()){
             error=true
             binding.tilEmail.error="Enter Email"
-        }
-        if (phoneNumber.isBlank()){
-            error=true
-            binding.tilPhoneNumber.error="Enter PhoneNUmber"
         }
         if (password.isBlank()){
             error=true
@@ -73,8 +70,14 @@ class SignUpActivity : AppCompatActivity() {
             error=true
             binding.tilPassword.error="wrong password"
         }
+        if (phoneNumber.isBlank()){
+            error=true
+            binding.tilPhoneNumber.error="Enter PhoneNUmber"
+        }
         if(!error){
-            var registerRequests= RegisterRequests(firstname,lastname,email, phoneNumber,password)
+            binding.pbRegister.visibility=View.VISIBLE
+            var registerRequests= RegisterRequests(firstname,lastname,email,password,confirm,phoneNumber)
+            makeRegistrationRequest(registerRequests)
         }
     }
     fun makeRegistrationRequest(registerRequests:RegisterRequests){
@@ -83,6 +86,7 @@ class SignUpActivity : AppCompatActivity() {
 
         request.enqueue(object : Callback<RegisterResponse>{
             override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>){
+                binding.pbRegister.visibility= View.GONE
                 if (response.isSuccessful){
                     var message=response.body()?.message
                     Toast.makeText(baseContext, message,Toast.LENGTH_LONG).show()
@@ -96,6 +100,7 @@ class SignUpActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
+                binding.pbRegister.visibility= View.GONE
                 Toast.makeText(baseContext,t.message,Toast.LENGTH_LONG).show()
             }
         })
