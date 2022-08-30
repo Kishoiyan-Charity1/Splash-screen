@@ -1,4 +1,4 @@
-package dev.kishoiyan.workoutlog
+package dev.kishoiyan.workoutlog.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

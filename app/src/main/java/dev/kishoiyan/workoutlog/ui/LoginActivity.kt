@@ -1,21 +1,13 @@
-package dev.kishoiyan.workoutlog
+package dev.kishoiyan.workoutlog.ui
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.widget.Button
-import android.widget.TextView
-import com.google.android.material.textfield.TextInputEditText
-import com.google.android.material.textfield.TextInputLayout
+import android.util.Patterns
 import dev.kishoiyan.workoutlog.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
     lateinit var binding: ActivityLoginBinding
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         binding= ActivityLoginBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -23,8 +15,9 @@ class LoginActivity : AppCompatActivity() {
 
 
         binding.tvSignup.setOnClickListener {
-            val intent = Intent(this,SignUpActivity::class.java)
+            val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
+
 
         }
         binding.btnLogIn.setOnClickListener {
@@ -43,6 +36,9 @@ class LoginActivity : AppCompatActivity() {
             }
             if (password.isBlank()){
                 binding.tilPassword.error = "password is required"
+            }
+            if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                binding.tilEmail.error="enter email"
             }
 
         }
