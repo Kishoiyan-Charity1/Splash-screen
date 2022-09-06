@@ -74,9 +74,9 @@ class LoginActivity : AppCompatActivity() {
     }
     fun persistLogInDetails(logInResponse: LogInResponse){
         val editor=sharedPrefs.edit()
-        editor.putString("USER_ID",logInResponse.userId)
-        editor.putString("ACCESS_TOKEN",logInResponse.accessToken)
-        editor.putString("PROFILE_ID",logInResponse.profileId)
+        editor.putString("",logInResponse.userId)
+        editor.putString("",logInResponse.accessToken)
+        editor.putString("",logInResponse.profileId)
         editor.apply()
     }
 
