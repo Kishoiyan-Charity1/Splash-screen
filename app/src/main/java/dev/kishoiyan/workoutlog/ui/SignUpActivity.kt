@@ -8,6 +8,7 @@ import android.widget.Toast
 import dev.kishoiyan.workoutlog.ApiClient
 import dev.kishoiyan.workoutlog.ApiInterface
 import dev.kishoiyan.workoutlog.databinding.ActivitySignUpBinding
+import dev.kishoiyan.workoutlog.models.LogInResponse
 import dev.kishoiyan.workoutlog.models.RegisterRequests
 import dev.kishoiyan.workoutlog.models.RegisterResponse
 import retrofit2.Call
@@ -16,12 +17,10 @@ import retrofit2.Response
 
 class SignUpActivity : AppCompatActivity() {
     lateinit var binding: ActivitySignUpBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        binding= ActivitySignUpBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+        binding= ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
 
         binding.tvLogIn.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)
@@ -30,11 +29,9 @@ class SignUpActivity : AppCompatActivity() {
         binding.btnSignUp.setOnClickListener {
             val intent = Intent(this, HomeActivity::class.java)
             startActivity(intent)
-
             validateLogIn()
+
         }
-
-
     }
     fun validateLogIn(){
         var firstname= binding.etFirstName.text.toString()
@@ -80,30 +77,34 @@ class SignUpActivity : AppCompatActivity() {
             makeRegistrationRequest(registerRequests)
         }
     }
-    fun makeRegistrationRequest(registerRequests:RegisterRequests){
+    fun makeRegistrationRequest(registerRequests: RegisterRequests){
         var apiClient= ApiClient.buildApiClient(ApiInterface::class.java)
         var request =apiClient.registerUser(registerRequests)
 
-        request.enqueue(object : Callback<RegisterResponse>{
-            override fun onResponse(call: Call<RegisterResponse>, response: Response<RegisterResponse>){
-                binding.pbRegister.visibility= View.GONE
+        request.enqueue(object :Callback<RegisterResponse>{
+            override fun onResponse(
+                call: Call<RegisterResponse>,
+                response: Response<RegisterResponse>
+            )
+            {
+
+                binding.pbRegister.visibility=View.GONE
                 if (response.isSuccessful){
                     var message=response.body()?.message
-                    Toast.makeText(baseContext, message,Toast.LENGTH_LONG).show()
-                    startActivity(Intent(baseContext, LoginActivity::class.java))
+
+                    Toast.makeText(baseContext,message,Toast.LENGTH_LONG).show()
                 }
+
                 else{
                     var error=response.errorBody()?.string()
                     Toast.makeText(baseContext,error,Toast.LENGTH_LONG).show()
                 }
-
             }
-
             override fun onFailure(call: Call<RegisterResponse>, t: Throwable) {
-                binding.pbRegister.visibility= View.GONE
                 Toast.makeText(baseContext,t.message,Toast.LENGTH_LONG).show()
             }
-        })
-    }
 
+        })
+
+    }
 }
