@@ -1,10 +1,8 @@
 package dev.kishoiyan.workoutlog
 
-import dev.kishoiyan.workoutlog.models.LogInRequest
-import dev.kishoiyan.workoutlog.models.LogInResponse
-import dev.kishoiyan.workoutlog.models.RegisterRequests
-import dev.kishoiyan.workoutlog.models.RegisterResponse
+import dev.kishoiyan.workoutlog.models.*
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -14,5 +12,8 @@ interface ApiInterface {
     fun registerUser(@Body registerRequests: RegisterRequests): Call<RegisterResponse>
 
     @POST("/login")
-    fun loginUser(@Body logInRequest: LogInRequest):Call<LogInResponse>
+    suspend fun loginUser(@Body logInRequest: LogInRequest):Response<LogInResponse>
+
+    @POST("/profile")
+    suspend fun userProfile(@Body profileRequest: ProfileRequest): Call<ProfileResponse>
 }
